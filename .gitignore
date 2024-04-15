@@ -2,6 +2,7 @@
 *.class
 *.log
 *.pyc
+*.lock
 *.swp
 .DS_Store
 .atom/
@@ -41,3 +42,25 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Exceptions to above rules.
+!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+signaling_server/node_modules
+*.g.dart
+*.gen.dart
+*.freezed.dart
+app_component.config.dart
+router.gr.dart
+lib/generated
+.fvm
+!**/.fvm/fvm_config.json
+
+# Web related
+
+.fvm/
+
+# Visual Studio Code related
+.classpath
+.project
+.settings/
+.vscode/
