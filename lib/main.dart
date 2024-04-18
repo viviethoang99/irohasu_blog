@@ -1,9 +1,12 @@
 import 'package:appflowy_editor/appflowy_editor.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:irohasu_blog/cubit/appearance/appearance_cubit.dart';
 import 'package:irohasu_blog/cubit/appearance/theme.dart';
+// ignore: depend_on_referenced_packages
+import 'package:flutter_web_plugins/url_strategy.dart';
 
 import 'config/colorsscheme/default_colorscheme.dart';
 import 'cubit/appearance/base_appearance.dart';
@@ -15,6 +18,7 @@ final getIt = GetIt.instance;
 
 void main() async {
   runApp(const MyApp());
+  if (kIsWeb) usePathUrlStrategy();
 
   getIt.registerFactory<BaseAppearance>(
     () => PlatformExtension.isMobile ? MobileAppearance() : DesktopAppearance(),

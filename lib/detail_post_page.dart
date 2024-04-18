@@ -29,6 +29,7 @@ class _DetailPostPageState extends State<DetailPostPage> {
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
           child: Column(
             children: [
               const AppBarWidget(),

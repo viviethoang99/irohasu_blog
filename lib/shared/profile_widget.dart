@@ -15,7 +15,7 @@ class ProfileWidget extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 48.0,
-            // backgroundImage: AssetImage('assets/images/avatar.jpeg'),
+            backgroundImage: AssetImage('assets/images/avatar.jpg'),
             backgroundColor: Colors.blue,
           ),
           VSpace(12),

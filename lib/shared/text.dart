@@ -62,10 +62,15 @@ class IrohaText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (title.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
     if (selectable) {
       return SelectableText(
         title,
         maxLines: maxLines,
+        scrollPhysics: const NeverScrollableScrollPhysics(),
         textAlign: textAlign,
         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
               fontSize: fontSize,

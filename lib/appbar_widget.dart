@@ -13,15 +13,14 @@ class AppBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: ResponsiveWidget.isLargeScreen(context) ? 60 : 90,
       decoration: IrohaDecoration.decoration(
         borderRadius: BorderRadius.circular(0),
         Theme.of(context).cardColor,
         Theme.of(context).colorScheme.shadow.withOpacity(0.15),
       ),
       padding: ResponsiveWidget.isLargeScreen(context)
-          ? const EdgeInsets.symmetric(horizontal: 250)
-          : EdgeInsets.zero,
+          ? const EdgeInsets.symmetric(horizontal: 20, vertical: 20)
+          : const EdgeInsets.symmetric(vertical: 20),
       child: const _LogoBlogWidget(),
     );
   }
@@ -48,23 +47,21 @@ class __LogoBlogWidgetState extends State<_LogoBlogWidget> {
         },
         child: Container(
           color: _color,
-          padding: const EdgeInsets.all(10),
-          child: Row(
+          // padding: const EdgeInsets.all(10),
+          child:  Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 12.0,
                 backgroundColor: Colors.amber,
                 child: ClipOval(
-                    // child: Image.asset('assets/images/avatar.jpeg'),
+                    child: Image.asset('assets/images/avatar.jpg'),
                     ),
               ),
               const SizedBox(width: 8),
-              IrohaText.semibold(
-                ResponsiveWidget.isLargeScreen(context)
-                    ? ' Irohasu \n bezt girl'
-                    : 'Irohasu bezt girl',
+              const IrohaText.semibold(
+                'Irohasu bezt girl',
                 textAlign: TextAlign.center,
                 fontSize: 18,
               ),

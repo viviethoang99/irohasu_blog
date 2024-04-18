@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'post.g.dart';
@@ -6,25 +5,18 @@ part 'post.g.dart';
 typedef Posts = List<Post>;
 
 @JsonSerializable()
-class Post extends Equatable {
+class Post {
   const Post({
-    required this.name,
-    required this.image,
-    required this.createAt,
+    required this.title,
     required this.content,
     required this.tag,
-    required this.url,
+    required this.urlImage,
   });
 
-  final String? name;
-  final String? image;
-  final DateTime? createAt;
+  final String? title;
   final String? content;
   final String? tag;
-  final String? url;
+  final String? urlImage;
 
   factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
-
-  @override
-  List<Object?> get props => [name, image, createAt, content, tag, url];
 }
