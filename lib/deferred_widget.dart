@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
 
-/// loadLibrary
 typedef LoadLibraryBuilder = Future<dynamic> Function();
 
-/// deferredWidgetBuilder
 typedef DeferredWidgetBuilder = Widget Function();
 
-/// 延迟加载组件
-/// 不在 build 里使用 FutureBuilder 加载，因为 build 执行多少次就会导致 widget 创建多少次
-/// 这里在 initState 加载，或者当 DeferredWidgetBuilder 改变时重新加载
 class DeferredWidget extends StatefulWidget {
   const DeferredWidget({
     super.key,
     required this.loadLibrary,
     required this.builder,
     Widget? placeholder,
-  })  : placeholder = placeholder ?? const DeferredLoading();
+  }) : placeholder = placeholder ?? const DeferredLoading();
 
   final LoadLibraryBuilder loadLibrary;
   final DeferredWidgetBuilder builder;
@@ -77,7 +72,7 @@ class DeferredLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).colorScheme.background,
       alignment: Alignment.center,
       child: const CircularProgressIndicator(),
     );

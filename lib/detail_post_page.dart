@@ -6,6 +6,8 @@ import 'package:irohasu_blog/cubit/post_detail/post_detail_cubit.dart';
 import 'package:irohasu_blog/plugins/editor_plugins/code_block/appflowy_code_block.dart';
 import 'package:irohasu_blog/plugins/editor_plugins/code_block/code_block_component.dart';
 import 'package:irohasu_blog/shared/reponsiveness.dart';
+import 'package:irohasu_blog/shared/spacing.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import 'appbar_widget.dart';
 
@@ -33,6 +35,7 @@ class _DetailPostPageState extends State<DetailPostPage> {
           child: Column(
             children: [
               const AppBarWidget(),
+              const VSpace(20),
               BlocBuilder<PostDetailCubit, PostDetailState>(
                 builder: (context, state) {
                   return state.when(
@@ -97,7 +100,7 @@ class _DetailPostPageState extends State<DetailPostPage> {
       // todo-list block
       TodoListBlockKeys.type: TodoListBlockComponentBuilder(
         configuration: configuration,
-        iconBuilder: (context, node) {
+        iconBuilder: (context, node, __) {
           final checked = node.attributes[TodoListBlockKeys.checked] as bool;
           return GestureDetector(
             onTap: () => editorState.apply(
@@ -172,9 +175,7 @@ class _DetailPostPageState extends State<DetailPostPage> {
             text: text.text,
             style: before.style,
             recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                debugPrint('onTap: $href');
-              },
+              ..onTap = () => launchUrlString(href),
           );
         }
 

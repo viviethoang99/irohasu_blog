@@ -42,13 +42,11 @@ class __LogoBlogWidgetState extends State<_LogoBlogWidget> {
       onHover: (_) => setState(() => _color = const Color(0xFF3e4b5e)),
       onExit: (_) => setState(() => _color = Colors.transparent),
       child: InkWell(
-        onTap: () {
-          context.goNamed(AppRouter.home);
-        },
+        onTap: () => context.goNamed(AppRouter.home),
         child: Container(
           color: _color,
           // padding: const EdgeInsets.all(10),
-          child:  Row(
+          child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -56,8 +54,8 @@ class __LogoBlogWidgetState extends State<_LogoBlogWidget> {
                 radius: 12.0,
                 backgroundColor: Colors.amber,
                 child: ClipOval(
-                    child: Image.asset('assets/images/avatar.jpg'),
-                    ),
+                  child: Image.asset('assets/images/avatar.jpg'),
+                ),
               ),
               const SizedBox(width: 8),
               const IrohaText.semibold(
