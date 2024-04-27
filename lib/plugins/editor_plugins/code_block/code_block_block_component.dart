@@ -407,7 +407,7 @@ class _CodeBlockComponentWidgetState extends State<CodeBlockComponentWidget>
         child: Row(
           children: [
             const HSpace(16),
-            _DotsWidget(),
+            const _DotsWidget(),
             const HSpace(4),
             IrohaText.medium(
               language?.capitalize() ?? '',
@@ -675,7 +675,7 @@ const _listColorDots = [
 ];
 
 class _DotsWidget extends StatelessWidget {
-  _DotsWidget({super.key});
+  const _DotsWidget();
 
   @override
   Widget build(BuildContext context) {
