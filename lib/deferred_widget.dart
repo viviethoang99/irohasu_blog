@@ -64,8 +64,6 @@ class _DeferredWidgetState extends State<DeferredWidget> {
     return _loadChild ?? widget.placeholder;
   }
 }
-
-/// 延迟加载Loading
 class DeferredLoading extends StatelessWidget {
   const DeferredLoading({super.key});
 

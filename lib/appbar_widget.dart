@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:irohasu_blog/router.dart';
+import 'package:irohasu_blog/shared/spacing.dart';
 
 import 'shared/decoration.dart';
-import 'shared/reponsiveness.dart';
 import 'shared/text.dart';
 
 class AppBarWidget extends StatelessWidget {
@@ -18,10 +18,13 @@ class AppBarWidget extends StatelessWidget {
         Theme.of(context).cardColor,
         Theme.of(context).colorScheme.shadow.withOpacity(0.15),
       ),
-      padding: ResponsiveWidget.isLargeScreen(context)
-          ? const EdgeInsets.symmetric(horizontal: 20, vertical: 20)
-          : const EdgeInsets.symmetric(vertical: 20),
-      child: const _LogoBlogWidget(),
+      child: const Column(
+        children: [
+          VSpace(20),
+          _LogoBlogWidget(),
+          VSpace(20),
+        ],
+      ),
     );
   }
 }
@@ -34,25 +37,33 @@ class _LogoBlogWidget extends StatefulWidget {
 }
 
 class __LogoBlogWidgetState extends State<_LogoBlogWidget> {
-  var _color = Colors.transparent;
+  var isHover = false;
 
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      onHover: (_) => setState(() => _color = const Color(0xFF3e4b5e)),
-      onExit: (_) => setState(() => _color = Colors.transparent),
+      onHover: (_) => setState(() => isHover = true),
+      onExit: (_) => setState(() => isHover = false),
       child: InkWell(
         onTap: () => context.goNamed(AppRouter.home),
         child: Container(
-          color: _color,
-          // padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 8,
+          ),
+          decoration: isHover
+              ? IrohaDecoration.decoration(
+                  Theme.of(context).colorScheme.inverseSurface,
+                  Theme.of(context).colorScheme.shadow.withOpacity(0.1),
+                  blurRadius: 0,
+                )
+              : null,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CircleAvatar(
                 radius: 12.0,
-                backgroundColor: Colors.amber,
                 child: ClipOval(
                   child: Image.asset('assets/images/avatar.jpg'),
                 ),

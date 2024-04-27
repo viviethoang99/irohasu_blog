@@ -1,15 +1,22 @@
+import 'dart:convert';
+
 import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:intl/intl.dart';
 import 'package:irohasu_blog/cubit/post_detail/post_detail_cubit.dart';
-import 'package:irohasu_blog/plugins/editor_plugins/code_block/appflowy_code_block.dart';
-import 'package:irohasu_blog/plugins/editor_plugins/code_block/code_block_component.dart';
-import 'package:irohasu_blog/shared/reponsiveness.dart';
+import 'package:irohasu_blog/plugins/header_plugins.dart';
+import 'package:irohasu_blog/post.dart';
 import 'package:irohasu_blog/shared/spacing.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import 'appbar_widget.dart';
+import 'plugins/editor_plugins/code_block/code_block_actions.dart';
+import 'plugins/editor_plugins/code_block/code_block_block_component.dart';
+import 'plugins/editor_plugins/code_block/code_block_style.dart';
+import 'shared/text.dart';
 
 class DetailPostPage extends StatefulWidget {
   const DetailPostPage({
@@ -46,17 +53,21 @@ class _DetailPostPageState extends State<DetailPostPage> {
                       ),
                     ),
                     loaded: (data) {
+                      final post = Post.fromJson(
+                        jsonDecode(data.description ?? ''),
+                      );
                       final editotState = EditorState(
                         document: markdownToDocument(
                           data.files!.first.content!,
                         ),
                       );
-                      return buildEditor(editotState);
+                      return buildEditor(editotState, post, data.createdAt);
                     },
                     failed: (err) => const SizedBox.shrink(),
                   );
                 },
               ),
+              const VSpace(20),
             ],
           ),
         ),
@@ -64,12 +75,44 @@ class _DetailPostPageState extends State<DetailPostPage> {
     );
   }
 
-  Widget buildEditor(EditorState editorState) {
-    return AppFlowyEditor(
-      editorState: editorState,
-      editable: false,
-      editorStyle: customizeEditorStyle(),
-      blockComponentBuilders: customBuilder(editorState),
+  Widget buildEditor(EditorState editorState, Post? post, DateTime? createAt) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: Theme.of(context).cardColor,
+      ),
+      constraints: const BoxConstraints(
+          // maxWidth: 700,
+          ),
+      margin: EdgeInsets.symmetric(horizontal: 100),
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (post?.title?.isNotEmpty ?? false) ...[
+            IrohaText.semibold(
+              post?.title ?? '',
+              fontSize: 30,
+            ),
+            const VSpace(10),
+          ],
+          if (createAt != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: IrohaText.regular(
+                createAt.toString(),
+                fontSize: 14,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            ),
+          AppFlowyEditor(
+            editorState: editorState,
+            editable: false,
+            editorStyle: customizeEditorStyle(),
+            blockComponentBuilders: customBuilder(editorState),
+          ),
+        ],
+      ),
     );
   }
 
@@ -92,8 +135,9 @@ class _DetailPostPageState extends State<DetailPostPage> {
     // customize heading block style
     return {
       ...standardBlockComponentBuilderMap,
+
       // heading block
-      HeadingBlockKeys.type: HeadingBlockComponentBuilder(
+      HeadingBlockKeys.type: CustomHeadingBlockComponentBuilder(
         configuration: configuration,
       ),
 
@@ -143,8 +187,22 @@ class _DetailPostPageState extends State<DetailPostPage> {
       ),
 
       CodeBlockKeys.type: CodeBlockComponentBuilder(
-        padding: const EdgeInsets.all(20),
-        editorState: editorState,
+        configuration: BlockComponentConfiguration(
+          textStyle: (_) => const TextStyle(
+            fontFamily: 'RobotoMono',
+            fontSize: 14,
+            height: 1.5,
+          ),
+        ),
+        styleBuilder: () => CodeBlockStyle(
+          backgroundColor: Theme.of(context).colorScheme.background,
+          foregroundColor:
+              Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
+        ),
+        padding: const EdgeInsets.all(20).copyWith(bottom: 10),
+        actions: CodeBlockActions(
+          onCopy: (code) => Clipboard.setData(ClipboardData(text: code)),
+        ),
       ),
     };
   }
@@ -152,9 +210,7 @@ class _DetailPostPageState extends State<DetailPostPage> {
   /// custom the text style
   EditorStyle customizeEditorStyle() {
     return EditorStyle(
-      padding: ResponsiveWidget.isSmallScreen(context)
-          ? const EdgeInsets.symmetric(horizontal: 20)
-          : const EdgeInsets.only(left: 200, right: 200),
+      padding: EdgeInsets.zero,
       cursorColor: Colors.green,
       dragHandleColor: Colors.green,
       selectionColor: Colors.green.withOpacity(0.5),
@@ -165,6 +221,7 @@ class _DetailPostPageState extends State<DetailPostPage> {
         ),
         bold: const TextStyle(fontWeight: FontWeight.w900),
         code: const TextStyle(fontSize: 16.0),
+        href: TextStyle(color: Theme.of(context).colorScheme.secondary),
       ),
       textSpanDecorator: (context, node, index, text, before, _) {
         final attributes = text.attributes;
