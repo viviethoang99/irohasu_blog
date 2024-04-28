@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../config/constant/constant.dart';
 import 'theme.dart';
 
-const builtInFontFamily = 'Poppins';
+const builtInFontFamily = 'BeVietnamPro';
 
 abstract class BaseAppearance {
   final white = const Color(0xFFFFFFFF);

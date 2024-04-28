@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:irohasu_blog/cubit/appearance/appearance_cubit.dart';
 import 'package:irohasu_blog/cubit/appearance/theme.dart';
 // ignore: depend_on_referenced_packages
@@ -18,7 +19,10 @@ final getIt = GetIt.instance;
 
 void main() async {
   runApp(const MyApp());
-  if (kIsWeb) usePathUrlStrategy();
+  if (kIsWeb) {
+    GoogleFonts.config.allowRuntimeFetching = false;
+    usePathUrlStrategy();
+  }
 
   getIt.registerFactory<BaseAppearance>(
     () => PlatformExtension.isMobile ? MobileAppearance() : DesktopAppearance(),

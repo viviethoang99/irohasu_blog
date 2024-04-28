@@ -189,7 +189,7 @@ class _DetailPostPageState extends State<DetailPostPage> {
       CodeBlockKeys.type: CodeBlockComponentBuilder(
         configuration: BlockComponentConfiguration(
           textStyle: (_) => const TextStyle(
-            fontFamily: 'RobotoMono',
+            fontFamily: 'FireCode',
             fontSize: 14,
             height: 1.5,
           ),

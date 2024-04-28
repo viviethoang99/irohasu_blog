@@ -14,7 +14,7 @@ class AppearanceCubit extends Cubit<AppearanceState> {
     AppTheme appTheme,
   ) : super(AppearanceState.initial(
           appTheme: appTheme,
-          font: 'BeVietnam',
+          font: 'BeVietnamPro',
           monospaceFont: 'mono',
           themeMode: ThemeMode.dark,
         ));
