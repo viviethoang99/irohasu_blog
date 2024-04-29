@@ -28,9 +28,6 @@ class AppearanceCubit extends Cubit<AppearanceState> {
     final value = await getIt<KeyValueStorage>().get(
       KVKeys.kAppearanceCubitThemeMode,
     );
-    if (value == null) {
-      return ThemeMode.system;
-    }
     return ThemeMode.values.firstWhereOrNull((theme) => theme.name == value) ??
         ThemeMode.system;
   }

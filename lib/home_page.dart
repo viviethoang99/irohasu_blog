@@ -256,17 +256,6 @@ class _ItemThemeMode extends StatelessWidget {
     );
   }
 
-  String _themeModeLabelText(ThemeMode themeMode) {
-    switch (themeMode) {
-      case (ThemeMode.light):
-        return 'Sáng';
-      case (ThemeMode.dark):
-        return 'Tối';
-      default:
-        return 'Tự động';
-    }
-  }
-
   IconData _themeModeIcon(ThemeMode themeMode) {
     switch (themeMode) {
       case (ThemeMode.light):

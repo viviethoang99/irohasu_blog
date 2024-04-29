@@ -376,7 +376,6 @@ class _CodeBlockComponentWidgetState extends State<CodeBlockComponentWidget>
     final delta = node.delta ?? Delta();
     final content = delta.toPlainText();
 
-
     final linesOfCode = delta.toPlainText().split('\n').length;
 
     return Padding(
@@ -582,11 +581,12 @@ class DartCodeViewer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-        // final isLightMode = Theme.of(context).brightness == Brightness.light;
+    final isLightMode = Theme.of(context).brightness == Brightness.light;
 
-    Brightness brightness = MediaQuery.platformBrightnessOf(context);
     return FutureBuilder(
-      future: HighlighterTheme.loadForBrightness(brightness),
+      future: isLightMode
+          ? HighlighterTheme.loadLightTheme()
+          : HighlighterTheme.loadDarkTheme(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const SizedBox.shrink();
 
