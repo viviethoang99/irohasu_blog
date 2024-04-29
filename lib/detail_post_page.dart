@@ -84,7 +84,7 @@ class _DetailPostPageState extends State<DetailPostPage> {
       constraints: const BoxConstraints(
           // maxWidth: 700,
           ),
-      margin: EdgeInsets.symmetric(horizontal: 100),
+      margin: const EdgeInsets.symmetric(horizontal: 100),
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -190,8 +190,7 @@ class _DetailPostPageState extends State<DetailPostPage> {
         configuration: BlockComponentConfiguration(
           textStyle: (_) => const TextStyle(
             fontFamily: 'FireCode',
-            fontSize: 14,
-            height: 1.5,
+            fontSize: 16,
           ),
         ),
         styleBuilder: () => CodeBlockStyle(

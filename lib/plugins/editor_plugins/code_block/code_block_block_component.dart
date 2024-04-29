@@ -5,73 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:highlight/highlight.dart' as highlight;
-import 'package:highlight/languages/all.dart';
 import 'package:irohasu_blog/config/extension/string_extension.dart';
 import 'package:irohasu_blog/shared/spacing.dart';
 import 'package:irohasu_blog/shared/text.dart';
+import 'package:syntax_highlight/syntax_highlight.dart';
 
 import 'code_block_actions.dart';
 import 'code_block_localization.dart';
 import 'code_block_style.dart';
-import 'code_block_themes.dart';
-
-final allCodeBlockLanguages = [
-  'Assembly',
-  'Bash',
-  'BASIC',
-  'C',
-  'C#',
-  'CPP',
-  'Clojure',
-  'CS',
-  'CSS',
-  'Dart',
-  'Docker',
-  'Elixir',
-  'Elm',
-  'Erlang',
-  'Fortran',
-  'Go',
-  'GraphQL',
-  'Haskell',
-  'HTML',
-  'Java',
-  'JavaScript',
-  'JSON',
-  'Kotlin',
-  'LaTeX',
-  'Lisp',
-  'Lua',
-  'Markdown',
-  'MATLAB',
-  'Objective-C',
-  'OCaml',
-  'Perl',
-  'PHP',
-  'PowerShell',
-  'Python',
-  'R',
-  'Ruby',
-  'Rust',
-  'Scala',
-  'Shell',
-  'SQL',
-  'Swift',
-  'TypeScript',
-  'Visual Basic',
-  'XML',
-  'YAML',
-];
-
-final defaultCodeBlockSupportedLanguages = allCodeBlockLanguages
-    .map((e) => e.toLowerCase())
-    .toSet()
-    .intersection(allLanguages.keys.toSet())
-    .toList()
-  ..add('auto')
-  ..add('c')
-  ..sort();
 
 class CodeBlockKeys {
   const CodeBlockKeys._();
@@ -432,24 +373,10 @@ class _CodeBlockComponentWidgetState extends State<CodeBlockComponentWidget>
   }
 
   Widget _buildCodeBlock(BuildContext context, TextDirection textDirection) {
-    final isLightMode = Theme.of(context).brightness == Brightness.light;
     final delta = node.delta ?? Delta();
     final content = delta.toPlainText();
 
-    final result = highlight.highlight.parse(
-      content,
-      language: language,
-      autoDetection: language == null,
-    );
 
-    autoDetectLanguage = language ?? result.language;
-
-    final codeNodes = result.nodes;
-    if (codeNodes == null) {
-      throw Exception('Code block parse error.');
-    }
-
-    final codeTextSpans = _convert(codeNodes, isLightMode: isLightMode);
     final linesOfCode = delta.toPlainText().split('\n').length;
 
     return Padding(
@@ -480,21 +407,9 @@ class _CodeBlockComponentWidgetState extends State<CodeBlockComponentWidget>
                   padding: const EdgeInsets.only(bottom: 16),
                   physics: const ClampingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
-                  child: AppFlowyRichText(
-                    key: forwardKey,
-                    delegate: this,
-                    node: widget.node,
-                    editorState: editorState,
-                    placeholderText: placeholderText,
-                    lineHeight: 1.5,
-                    textSpanDecorator: (_) => TextSpan(
-                      style: textStyle,
-                      children: codeTextSpans,
-                    ),
-                    placeholderTextSpanDecorator: (textSpan) => textSpan,
-                    textDirection: textDirection,
-                    cursorColor: editorState.editorStyle.cursorColor,
-                    selectionColor: editorState.editorStyle.selectionColor,
+                  child: DartCodeViewer(
+                    content,
+                    textStyle: textStyle,
                   ),
                 ),
               ),
@@ -560,49 +475,6 @@ class _CodeBlockComponentWidgetState extends State<CodeBlockComponentWidget>
         }
       }
     });
-  }
-
-  // Copy from flutter.highlight package.
-  // https://github.com/git-touch/highlight.dart/blob/master/flutter_highlight/lib/flutter_highlight.dart
-  List<TextSpan> _convert(
-    List<highlight.Node> nodes, {
-    bool isLightMode = true,
-  }) {
-    final List<TextSpan> spans = [];
-    List<TextSpan> currentSpans = spans;
-    final List<List<TextSpan>> stack = [];
-
-    final cbTheme = isLightMode ? lightThemeInCodeblock : darkThemeInCodeBlock;
-
-    void traverse(highlight.Node node) {
-      if (node.value != null) {
-        currentSpans.add(
-          node.className == null
-              ? TextSpan(text: node.value)
-              : TextSpan(text: node.value, style: cbTheme[node.className!]),
-        );
-      } else if (node.children != null) {
-        final List<TextSpan> tmp = [];
-        currentSpans.add(
-          TextSpan(children: tmp, style: cbTheme[node.className!]),
-        );
-        stack.add(currentSpans);
-        currentSpans = tmp;
-
-        for (final n in node.children!) {
-          traverse(n);
-          if (n == node.children!.last) {
-            currentSpans = stack.isEmpty ? spans : stack.removeLast();
-          }
-        }
-      }
-    }
-
-    for (final node in nodes) {
-      traverse(node);
-    }
-
-    return spans;
   }
 }
 
@@ -693,6 +565,42 @@ class _DotsWidget extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class DartCodeViewer extends StatelessWidget {
+  final String code;
+
+  final TextStyle textStyle;
+
+  const DartCodeViewer(
+    this.code, {
+    super.key,
+    required this.textStyle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+        // final isLightMode = Theme.of(context).brightness == Brightness.light;
+
+    Brightness brightness = MediaQuery.platformBrightnessOf(context);
+    return FutureBuilder(
+      future: HighlighterTheme.loadForBrightness(brightness),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return const SizedBox.shrink();
+
+        Highlighter highlighter = Highlighter(
+          language: 'dart',
+          theme: snapshot.data!,
+        );
+
+        TextSpan highlightedCode = highlighter.highlight(code);
+        return SelectableText.rich(
+          highlightedCode,
+          style: textStyle,
+        );
+      },
     );
   }
 }
