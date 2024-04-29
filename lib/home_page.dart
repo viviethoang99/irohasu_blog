@@ -8,6 +8,7 @@ import 'package:irohasu_blog/shared/reponsiveness.dart';
 import 'package:irohasu_blog/shared/spacing.dart';
 import 'package:irohasu_blog/shared/text.dart';
 
+import 'cubit/appearance/appearance_cubit.dart';
 import 'home/presentation/profile_widget.dart';
 import 'shared/decoration.dart';
 
@@ -123,11 +124,13 @@ class _LargeWidget extends StatelessWidget {
 
 class _ButtonWidget extends StatefulWidget {
   const _ButtonWidget({
-    required this.title,
+    this.title,
+    this.icon,
     this.ontap,
   });
 
-  final String title;
+  final String? title;
+  final IconData? icon;
   final Function()? ontap;
 
   @override
@@ -153,16 +156,18 @@ class _ButtonWidgetState extends State<_ButtonWidget> {
               ? IrohaDecoration.decoration(
                   Theme.of(context).cardColor,
                   Theme.of(context).colorScheme.shadow.withOpacity(0.1),
-                  blurRadius: 0,
+                  blurRadius: 2,
                   borderRadius: BorderRadius.circular(4),
                 )
               : null,
-          child: IrohaText.regular(
-            widget.title,
-            maxLines: 3,
-            fontSize: 14,
-            textAlign: TextAlign.center,
-          ),
+          child: widget.icon != null
+              ? Icon(widget.icon)
+              : IrohaText.regular(
+                  widget.title?.replaceAll(' ', '\n') ?? '',
+                  maxLines: 3,
+                  fontSize: 14,
+                  textAlign: TextAlign.center,
+                ),
         ),
       ),
     );
@@ -215,15 +220,14 @@ class _TestAppbar extends StatelessWidget {
                   ),
                   const VSpace(20),
                   _ButtonWidget(
-                    title: 'Bài\nviết',
+                    title: 'Bài viết',
                     ontap: () {},
                   ),
-                  const VSpace(50),
-                  const Icon(Icons.home),
-                  const VSpace(20),
-                  const Icon(Icons.menu),
-                  const VSpace(20),
-                  const Icon(Icons.menu),
+                  _ButtonWidget(
+                    title: 'Về tôi',
+                    ontap: () {},
+                  ),
+                  const _ItemThemeMode(),
                 ],
               ),
             ),
@@ -231,5 +235,46 @@ class _TestAppbar extends StatelessWidget {
         }),
       ],
     );
+  }
+}
+
+class _ItemThemeMode extends StatelessWidget {
+  const _ItemThemeMode();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocSelector<AppearanceCubit, AppearanceState, ThemeMode>(
+      selector: (state) => state.themeMode,
+      builder: (context, currentThemeMode) {
+        return _ButtonWidget(
+          icon: _themeModeIcon(currentThemeMode),
+          ontap: () {
+            context.read<AppearanceCubit>().touchThemeSetting();
+          },
+        );
+      },
+    );
+  }
+
+  String _themeModeLabelText(ThemeMode themeMode) {
+    switch (themeMode) {
+      case (ThemeMode.light):
+        return 'Sáng';
+      case (ThemeMode.dark):
+        return 'Tối';
+      default:
+        return 'Tự động';
+    }
+  }
+
+  IconData _themeModeIcon(ThemeMode themeMode) {
+    switch (themeMode) {
+      case (ThemeMode.light):
+        return Icons.light_mode;
+      case (ThemeMode.dark):
+        return Icons.dark_mode;
+      default:
+        return Icons.devices;
+    }
   }
 }
