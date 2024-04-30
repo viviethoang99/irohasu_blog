@@ -16,6 +16,7 @@ import 'config/colorsscheme/default_colorscheme.dart';
 import 'cubit/appearance/base_appearance.dart';
 import 'cubit/appearance/desktop_appearance.dart';
 import 'cubit/appearance/mobile_appearance.dart';
+import 'cubit/document_appearance/document_appearance_cubit.dart';
 import 'router.dart';
 
 final getIt = GetIt.instance;
@@ -50,12 +51,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final router = AppRouter.router;
-    return BlocProvider<AppearanceCubit>(
-      create: (context) => AppearanceCubit(const AppTheme(
-        builtIn: true,
-        lightTheme: DefaultColorScheme.light(),
-        darkTheme: DefaultColorScheme.dark(),
-      )),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AppearanceCubit>(
+          create: (context) => AppearanceCubit(const AppTheme(
+            builtIn: true,
+            lightTheme: DefaultColorScheme.light(),
+            darkTheme: DefaultColorScheme.dark(),
+          )),
+        ),
+        BlocProvider(
+          create: (_) => DocumentAppearanceCubit(),
+        ),
+      ],
       child: BlocBuilder<AppearanceCubit, AppearanceState>(
         builder: (context, state) {
           return MaterialApp.router(

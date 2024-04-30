@@ -334,40 +334,36 @@ class _CodeBlockComponentWidgetState extends State<CodeBlockComponentWidget>
   }
 
   Widget _buildAppbar() {
-    return MouseRegion(
-      onEnter: (_) => setState(() => canPanStart = false),
-      onExit: (_) => setState(() => canPanStart = true),
-      child: DecoratedBox(
-        decoration: const BoxDecoration(
-          color: Color(0xFF292b2f),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(16),
-            topRight: Radius.circular(16),
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        color: Color(0xFF292b2f),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        ),
+      ),
+      child: Row(
+        children: [
+          const HSpace(16),
+          const _DotsWidget(),
+          const HSpace(4),
+          IrohaText.medium(
+            language?.capitalize() ?? '',
+            fontSize: 16,
           ),
-        ),
-        child: Row(
-          children: [
-            const HSpace(16),
-            const _DotsWidget(),
-            const HSpace(4),
-            IrohaText.medium(
-              language?.capitalize() ?? '',
-              fontSize: 16,
+          const Spacer(),
+          if (widget.actions.onCopy != null &&
+              widget.copyButtonBuilder == null) ...[
+            _CopyButton(
+              node: node,
+              onCopy: widget.actions.onCopy!,
+              localizations: widget.localizations,
+              foregroundColor: widget.style?.foregroundColor,
             ),
-            const Spacer(),
-            if (widget.actions.onCopy != null &&
-                widget.copyButtonBuilder == null) ...[
-              _CopyButton(
-                node: node,
-                onCopy: widget.actions.onCopy!,
-                localizations: widget.localizations,
-                foregroundColor: widget.style?.foregroundColor,
-              ),
-            ] else if (widget.copyButtonBuilder != null) ...[
-              widget.copyButtonBuilder!(editorState, node),
-            ],
+          ] else if (widget.copyButtonBuilder != null) ...[
+            widget.copyButtonBuilder!(editorState, node),
           ],
-        ),
+        ],
       ),
     );
   }
@@ -377,6 +373,8 @@ class _CodeBlockComponentWidgetState extends State<CodeBlockComponentWidget>
     final content = delta.toPlainText();
 
     final linesOfCode = delta.toPlainText().split('\n').length;
+
+    final isLightMode = Theme.of(context).brightness == Brightness.light;
 
     return Padding(
       padding: widget.padding,
@@ -406,9 +404,36 @@ class _CodeBlockComponentWidgetState extends State<CodeBlockComponentWidget>
                   padding: const EdgeInsets.only(bottom: 16),
                   physics: const ClampingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
-                  child: DartCodeViewer(
-                    content,
-                    textStyle: textStyle,
+                  child: FutureBuilder(
+                    future: isLightMode
+                        ? HighlighterTheme.loadLightTheme()
+                        : HighlighterTheme.loadDarkTheme(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) return const SizedBox.shrink();
+
+                      Highlighter highlighter = Highlighter(
+                        language: 'dart',
+                        theme: snapshot.data!,
+                      );
+
+                      final textSpanCode = highlighter
+                          .highlight(content)
+                          .copyWith(style: textStyle);
+
+                      return AppFlowyRichText(
+                        key: forwardKey,
+                        delegate: this,
+                        node: widget.node,
+                        editorState: editorState,
+                        placeholderText: placeholderText,
+                        lineHeight: 1.5,
+                        textSpanDecorator: (_) => textSpanCode,
+                        placeholderTextSpanDecorator: (textSpan) => textSpan,
+                        textDirection: textDirection,
+                        cursorColor: editorState.editorStyle.cursorColor,
+                        selectionColor: editorState.editorStyle.selectionColor,
+                      );
+                    },
                   ),
                 ),
               ),
@@ -417,15 +442,6 @@ class _CodeBlockComponentWidgetState extends State<CodeBlockComponentWidget>
         ],
       ),
     );
-  }
-
-  Future<void> updateLanguage(String language) async {
-    final transaction = editorState.transaction
-      ..updateNode(
-        node,
-        {CodeBlockKeys.language: language == 'auto' ? null : language},
-      );
-    await editorState.apply(transaction);
   }
 
   void calculateScrollPosition() {
@@ -494,7 +510,10 @@ class _LinesOfCodeNumbers extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           for (int i = 1; i <= linesOfCode; i++)
-            Text(i.toString(), style: textStyle),
+            Text(
+              i.toString(),
+              style: textStyle,
+            ),
         ],
       ),
     );
@@ -564,43 +583,6 @@ class _DotsWidget extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class DartCodeViewer extends StatelessWidget {
-  final String code;
-
-  final TextStyle textStyle;
-
-  const DartCodeViewer(
-    this.code, {
-    super.key,
-    required this.textStyle,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final isLightMode = Theme.of(context).brightness == Brightness.light;
-
-    return FutureBuilder(
-      future: isLightMode
-          ? HighlighterTheme.loadLightTheme()
-          : HighlighterTheme.loadDarkTheme(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) return const SizedBox.shrink();
-
-        Highlighter highlighter = Highlighter(
-          language: 'dart',
-          theme: snapshot.data!,
-        );
-
-        TextSpan highlightedCode = highlighter.highlight(code);
-        return SelectableText.rich(
-          highlightedCode,
-          style: textStyle,
-        );
-      },
     );
   }
 }

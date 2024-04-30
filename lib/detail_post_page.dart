@@ -1,18 +1,16 @@
 import 'dart:convert';
 
 import 'package:appflowy_editor/appflowy_editor.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:intl/intl.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:irohasu_blog/cubit/post_detail/post_detail_cubit.dart';
 import 'package:irohasu_blog/plugins/header_plugins.dart';
 import 'package:irohasu_blog/post.dart';
 import 'package:irohasu_blog/shared/spacing.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
-import 'appbar_widget.dart';
+import 'editor_style.dart';
 import 'plugins/editor_plugins/code_block/code_block_actions.dart';
 import 'plugins/editor_plugins/code_block/code_block_block_component.dart';
 import 'plugins/editor_plugins/code_block/code_block_style.dart';
@@ -31,6 +29,17 @@ class DetailPostPage extends StatefulWidget {
 }
 
 class _DetailPostPageState extends State<DetailPostPage> {
+  late final EditorStyleCustomizer _styleCustomizer;
+
+  @override
+  void initState() {
+    _styleCustomizer = EditorStyleCustomizer(
+      context: context,
+      padding: EdgeInsets.zero,
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<PostDetailCubit>(
@@ -39,36 +48,38 @@ class _DetailPostPageState extends State<DetailPostPage> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SingleChildScrollView(
           physics: const ClampingScrollPhysics(),
-          child: Column(
-            children: [
-              const AppBarWidget(),
-              const VSpace(20),
-              BlocBuilder<PostDetailCubit, PostDetailState>(
-                builder: (context, state) {
-                  return state.when(
-                    initial: () => const Padding(
-                      padding: EdgeInsets.only(top: 50),
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    ),
-                    loaded: (data) {
-                      final post = Post.fromJson(
-                        jsonDecode(data.description ?? ''),
-                      );
-                      final editotState = EditorState(
-                        document: markdownToDocument(
-                          data.files!.first.content!,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const VSpace(20),
+                BlocBuilder<PostDetailCubit, PostDetailState>(
+                  builder: (context, state) {
+                    return state.when(
+                      initial: () => const Padding(
+                        padding: EdgeInsets.only(top: 50),
+                        child: Center(
+                          child: CircularProgressIndicator(),
                         ),
-                      );
-                      return buildEditor(editotState, post, data.createdAt);
-                    },
-                    failed: (err) => const SizedBox.shrink(),
-                  );
-                },
-              ),
-              const VSpace(20),
-            ],
+                      ),
+                      loaded: (data) {
+                        final post = Post.fromJson(
+                          jsonDecode(data.description ?? ''),
+                        );
+                        final editotState = EditorState(
+                          document: markdownToDocument(
+                            data.files!.first.content!,
+                          ),
+                        );
+                        return buildEditor(editotState, post, data.createdAt);
+                      },
+                      failed: (err) => const SizedBox.shrink(),
+                    );
+                  },
+                ),
+                const VSpace(20),
+              ],
+            ),
           ),
         ),
       ),
@@ -82,8 +93,8 @@ class _DetailPostPageState extends State<DetailPostPage> {
         color: Theme.of(context).cardColor,
       ),
       constraints: const BoxConstraints(
-          // maxWidth: 700,
-          ),
+        maxWidth: 900,
+      ),
       margin: const EdgeInsets.symmetric(horizontal: 100),
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -108,7 +119,7 @@ class _DetailPostPageState extends State<DetailPostPage> {
           AppFlowyEditor(
             editorState: editorState,
             editable: false,
-            editorStyle: customizeEditorStyle(),
+            editorStyle: _styleCustomizer.style(),
             blockComponentBuilders: customBuilder(editorState),
           ),
         ],
@@ -139,6 +150,8 @@ class _DetailPostPageState extends State<DetailPostPage> {
       // heading block
       HeadingBlockKeys.type: CustomHeadingBlockComponentBuilder(
         configuration: configuration,
+        textStyleBuilder: (level) =>
+            _styleCustomizer.headingStyleBuilder(level),
       ),
 
       // todo-list block
@@ -146,16 +159,10 @@ class _DetailPostPageState extends State<DetailPostPage> {
         configuration: configuration,
         iconBuilder: (context, node, __) {
           final checked = node.attributes[TodoListBlockKeys.checked] as bool;
-          return GestureDetector(
-            onTap: () => editorState.apply(
-              editorState.transaction
-                ..updateNode(node, {TodoListBlockKeys.checked: !checked}),
-            ),
-            child: Icon(
-              checked ? Icons.check_box : Icons.check_box_outline_blank,
-              size: 20,
-              color: Colors.white,
-            ),
+          return Icon(
+            checked ? Icons.check_box : Icons.check_box_outline_blank,
+            size: 20,
+            color: Colors.white,
           );
         },
       ),
@@ -188,9 +195,8 @@ class _DetailPostPageState extends State<DetailPostPage> {
 
       CodeBlockKeys.type: CodeBlockComponentBuilder(
         configuration: BlockComponentConfiguration(
-          textStyle: (_) => const TextStyle(
-            fontFamily: 'FireCode',
-            fontSize: 16,
+          textStyle: (_) => GoogleFonts.firaCode(
+            fontSize: 14,
           ),
         ),
         styleBuilder: () => CodeBlockStyle(
@@ -204,57 +210,5 @@ class _DetailPostPageState extends State<DetailPostPage> {
         ),
       ),
     };
-  }
-
-  /// custom the text style
-  EditorStyle customizeEditorStyle() {
-    return EditorStyle(
-      padding: EdgeInsets.zero,
-      cursorColor: Colors.green,
-      dragHandleColor: Colors.green,
-      selectionColor: Colors.green.withOpacity(0.5),
-      textStyleConfiguration: TextStyleConfiguration(
-        text: TextStyle(
-          fontSize: 16.0,
-          color: Theme.of(context).textTheme.bodyMedium?.color,
-        ),
-        bold: const TextStyle(fontWeight: FontWeight.w900),
-        code: const TextStyle(fontSize: 16.0),
-        href: TextStyle(color: Theme.of(context).colorScheme.secondary),
-      ),
-      textSpanDecorator: (context, node, index, text, before, _) {
-        final attributes = text.attributes;
-
-        final href = attributes?[AppFlowyRichTextKeys.href];
-        if (href != null) {
-          return TextSpan(
-            text: text.text,
-            style: before.style,
-            recognizer: TapGestureRecognizer()
-              ..onTap = () => launchUrlString(href),
-          );
-        }
-
-        final code = attributes?[AppFlowyRichTextKeys.code];
-        if (code != null) {
-          return WidgetSpan(
-            alignment: PlaceholderAlignment.baseline,
-            baseline: TextBaseline.alphabetic,
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
-              decoration: BoxDecoration(
-                color: Theme.of(context).dividerColor,
-                borderRadius: const BorderRadius.all(Radius.circular(5)),
-              ),
-              child: Text(
-                text.text,
-                style: before.style,
-              ),
-            ),
-          );
-        }
-        return before;
-      },
-    );
   }
 }

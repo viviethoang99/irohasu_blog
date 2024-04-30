@@ -5,8 +5,8 @@ class DocumentAppearanceCubit extends Cubit<DocumentAppearance> {
       : super(
           const DocumentAppearance(
             fontSize: 14,
-            fontFamily: 'Robocon',
-            codeFontFamily: '123456',
+            fontFamily: 'BeVietnamPro',
+            codeFontFamily: 'BeVietnamPro',
           ),
         );
 }
