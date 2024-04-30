@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:irohasu_blog/config/extension/extension.dart';
 import 'package:irohasu_blog/cubit/post_detail/post_detail_cubit.dart';
 import 'package:irohasu_blog/plugins/header_plugins.dart';
 import 'package:irohasu_blog/post.dart';
+import 'package:irohasu_blog/shared/iroha_scaffold.dart';
 import 'package:irohasu_blog/shared/spacing.dart';
 
 import 'editor_style.dart';
@@ -44,10 +46,9 @@ class _DetailPostPageState extends State<DetailPostPage> {
   Widget build(BuildContext context) {
     return BlocProvider<PostDetailCubit>(
       create: (context) => PostDetailCubit(widget.id)..initLoading(),
-      child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        body: SingleChildScrollView(
-          physics: const ClampingScrollPhysics(),
+      child: IrohaScaffold(
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -95,7 +96,7 @@ class _DetailPostPageState extends State<DetailPostPage> {
       constraints: const BoxConstraints(
         maxWidth: 900,
       ),
-      margin: const EdgeInsets.symmetric(horizontal: 100),
+      margin: const EdgeInsets.symmetric(horizontal: 4),
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,7 +112,7 @@ class _DetailPostPageState extends State<DetailPostPage> {
             Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: IrohaText.regular(
-                createAt.toString(),
+                createAt.date2String(),
                 fontSize: 14,
                 color: Theme.of(context).colorScheme.secondary,
               ),

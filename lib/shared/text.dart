@@ -12,6 +12,7 @@ class IrohaText extends StatelessWidget {
     this.decoration,
     this.selectable = false,
     this.height,
+    this.fontStyle,
   }) : fontWeight = FontWeight.w600;
 
   const IrohaText.medium(
@@ -25,6 +26,7 @@ class IrohaText extends StatelessWidget {
     this.decoration,
     this.selectable = false,
     this.height,
+    this.fontStyle,
   }) : fontWeight = FontWeight.w500;
 
   const IrohaText.regular(
@@ -38,6 +40,7 @@ class IrohaText extends StatelessWidget {
     this.decoration,
     this.selectable = false,
     this.height,
+    this.fontStyle,
   }) : fontWeight = FontWeight.w400;
 
   const IrohaText(
@@ -52,6 +55,7 @@ class IrohaText extends StatelessWidget {
     this.decoration,
     this.selectable = false,
     this.height,
+    this.fontStyle,
   });
 
   final String title;
@@ -64,7 +68,7 @@ class IrohaText extends StatelessWidget {
   final TextDecoration? decoration;
   final bool selectable;
   final double? height;
-
+  final FontStyle? fontStyle;
   @override
   Widget build(BuildContext context) {
     if (title.isEmpty) {
@@ -80,6 +84,7 @@ class IrohaText extends StatelessWidget {
         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
               fontSize: fontSize,
               fontWeight: fontWeight,
+              fontStyle: fontStyle,
               color: color,
               decoration: decoration,
               height: height,
@@ -97,6 +102,7 @@ class IrohaText extends StatelessWidget {
               color: color,
               decoration: decoration,
               height: height,
+              fontStyle: fontStyle,
             ),
       );
     }

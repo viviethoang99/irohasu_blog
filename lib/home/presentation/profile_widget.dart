@@ -25,12 +25,15 @@ class ProfileWidget extends StatelessWidget {
               fontSize: 25,
             ),
             VSpace(4),
-            IrohaText.regular(
-              'Yuri is bezt cir',
-              fontSize: 15,
-              height: 1.5,
+            Opacity(
+              opacity: .5,
+              child: IrohaText.regular(
+                'Yuri Is Justice',
+                fontSize: 15,
+                height: 1.5,
+              ),
             ),
-            VSpace(8),
+            VSpace(12),
             IrohaText.regular(
               'Hi, mình là Hoàng.',
               fontSize: 15,
@@ -39,7 +42,7 @@ class ProfileWidget extends StatelessWidget {
             ),
             VSpace(8),
             IrohaText.regular(
-              'Công việc hiện tại của mình phần lớn liên quan đến Flutter, Golang và CI/CD. Ngoài ra, mình cũng rất quan tâm đến thiết kế và nghệ thuật tuy nhiên chưa có cơ hội nghiên cứu chuyên sâu.',
+              'Mình chủ yếu tập trung vào các lĩnh vực liên quan đến Flutter, Golang và Devops. Ngoài ra, mình cũng rất quan tâm đến thiết kế và nghệ thuật tuy nhiên chưa có cơ hội nghiên cứu chuyên sâu.',
               fontSize: 15,
               maxLines: null,
               height: 1.5,
@@ -53,7 +56,7 @@ class ProfileWidget extends StatelessWidget {
             ),
             VSpace(8),
             IrohaText.regular(
-              'Blog này được tạo ra như một cuốn nhật ký để mình viết ra những gì đã biết thêm trong tuần. Hi vọng sẽ duy trì thói quen này được vài tuần....',
+              'Blog này được tạo ra để làm một cuốn nhật ký ghi ra những gì đã học trong tuần. Hi vọng sẽ duy trì thói quen này được vài tuần....',
               fontSize: 15,
               maxLines: null,
               height: 1.5,

@@ -8,4 +8,8 @@ extension Capitalize on String {
     return replaceAll('_regular', '')
         .replaceAllMapped(camelCase, (m) => ' ${m.group(0)}');
   }
+
+  String splitContent() {
+    return replaceAll(' ', '\n');
+  }
 }
