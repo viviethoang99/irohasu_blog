@@ -393,7 +393,7 @@ t.a.toString
 w=t.d
 if(w==null){w=B.Z8(!0,s,!0,!0,s,s,!1)
 t.d=w}u=$.Sc()
-return new A.Wi4(u,w,D.k8,A.p33(),v,s,s)}}
+return new A.Wi4(u,w,D.L1,A.p33(),v,s,s)}}
 A.bjT.prototype={
 WJ4(d){var x=this.ax,w=x.a,v=x.b
 d.K1p(this.ay,x.d-v,new B.B1(w,v),x.c-w)}}
@@ -1483,14 +1483,15 @@ D.FbB=new E.VSL(null,C.r5,F.cOs,50,null)
 D.cje=new E.zbr(12,null)
 D.imD=new B.wY2("Vi Hoang",null,25,C.Ua,null,1,null,null,null)
 D.SmF=new E.zbr(4,null)
-D.Mhz=new B.wY2("Yuri is bezt cir",null,15,C.my,null,1,null,1.5,null)
-D.V2=new E.zbr(8,null)
+D.D8A=new B.wY2("Yuri Is Justice",null,15,C.my,null,1,null,1.5,null)
+D.NM5=new B.lyJ(0.5,D.D8A,null)
 D.bOA=new B.wY2("Hi, m\xecnh l\xe0 Ho\xe0ng.",null,15,C.my,null,null,null,1.5,null)
-D.fea=new B.wY2("C\xf4ng vi\u1ec7c hi\u1ec7n t\u1ea1i c\u1ee7a m\xecnh ph\u1ea7n l\u1edbn li\xean quan \u0111\u1ebfn Flutter, Golang v\xe0 CI/CD. Ngo\xe0i ra, m\xecnh c\u0169ng r\u1ea5t quan t\xe2m \u0111\u1ebfn thi\u1ebft k\u1ebf v\xe0 ngh\u1ec7 thu\u1eadt tuy nhi\xean ch\u01b0a c\xf3 c\u01a1 h\u1ed9i nghi\xean c\u1ee9u chuy\xean s\xe2u.",null,15,C.my,null,null,null,1.5,null)
+D.V2=new E.zbr(8,null)
+D.ALy=new B.wY2("M\xecnh ch\u1ee7 y\u1ebfu t\u1eadp trung v\xe0o c\xe1c l\u0129nh v\u1ef1c li\xean quan \u0111\u1ebfn Flutter, Golang v\xe0 Devops. Ngo\xe0i ra, m\xecnh c\u0169ng r\u1ea5t quan t\xe2m \u0111\u1ebfn thi\u1ebft k\u1ebf v\xe0 ngh\u1ec7 thu\u1eadt tuy nhi\xean ch\u01b0a c\xf3 c\u01a1 h\u1ed9i nghi\xean c\u1ee9u chuy\xean s\xe2u.",null,15,C.my,null,null,null,1.5,null)
 D.hux=new B.wY2("M\xecnh th\xedch c\u1ed9ng \u0111\u1ed3ng m\xe3 ngu\u1ed3n m\u1edf, nh\u01b0ng trong qu\xe1 kh\u1ee9 th\u01b0\u1eddng ch\u1ec9 t\u1eadp trung v\xe0o c\xe1c d\u1ef1 \xe1n c\xe1 nh\xe2n \xedt \u0111\u01b0\u1ee3c quan t\xe2m. Ngo\xe0i l\u1eadp tr\xecnh, s\u1edf th\xedch c\u1ee7a minh c\xf2n bao g\u1ed3m ch\u1ee5p \u1ea3nh, \u0111\u1ecdc truy\u1ec7n tranh v\xe0 ch\u01a1i game.",null,15,C.my,null,null,null,1.5,null)
-D.Ujt=new B.wY2("Blog n\xe0y \u0111\u01b0\u1ee3c t\u1ea1o ra nh\u01b0 m\u1ed9t cu\u1ed1n nh\u1eadt k\xfd \u0111\u1ec3 m\xecnh vi\u1ebft ra nh\u1eefng g\xec \u0111\xe3 bi\u1ebft th\xeam trong tu\u1ea7n. Hi v\u1ecdng s\u1ebd duy tr\xec th\xf3i quen n\xe0y \u0111\u01b0\u1ee3c v\xe0i tu\u1ea7n....",null,15,C.my,null,null,null,1.5,null)
-D.JZF=B.QI(x([D.FbB,D.cje,D.imD,D.SmF,D.Mhz,D.V2,D.bOA,D.V2,D.fea,D.V2,D.hux,D.V2,D.Ujt]),y.p)
-D.k8=new B.YW(C.lK,C.Wv,C.x8,C.a1,null,C.Al,null,D.JZF,null)
+D.NCR=new B.wY2("Blog n\xe0y \u0111\u01b0\u1ee3c t\u1ea1o ra \u0111\u1ec3 l\xe0m m\u1ed9t cu\u1ed1n nh\u1eadt k\xfd ghi ra nh\u1eefng g\xec \u0111\xe3 h\u1ecdc trong tu\u1ea7n. Hi v\u1ecdng s\u1ebd duy tr\xec th\xf3i quen n\xe0y \u0111\u01b0\u1ee3c v\xe0i tu\u1ea7n....",null,15,C.my,null,null,null,1.5,null)
+D.evD=B.QI(x([D.FbB,D.cje,D.imD,D.SmF,D.NM5,D.cje,D.bOA,D.V2,D.ALy,D.V2,D.hux,D.V2,D.NCR]),y.p)
+D.L1=new B.YW(C.lK,C.Wv,C.x8,C.a1,null,C.Al,null,D.evD,null)
 D.XfI=new E.zbr(40,null)
 D.cz=new A.UrV(null)
 D.SI=new E.zbr(30,null)
@@ -1532,4 +1533,4 @@ D.Iw=new A.zGM(null,null,null,null)})();(function staticFields(){$.ubx=null
 $.jPY=null})();(function lazyInitializers(){var x=a.lazyFinal
 x($,"HUg","XM1",()=>new A.jbf())})()};
 ((a,b)=>{a[b]=a.current
-a.eventLog.push({p:"main.dart.js_1",e:"endPart",h:b})})($__dart_deferred_initializers__,"zwnyCdQRFdbXmKvLpBl7VYlmioE=");
+a.eventLog.push({p:"main.dart.js_1",e:"endPart",h:b})})($__dart_deferred_initializers__,"QM+gruOmG2K6XPqNmdbfbSY5TeA=");
