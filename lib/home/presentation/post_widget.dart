@@ -114,7 +114,7 @@ class _PostWidgetState extends State<_PostWidget> {
       onExit: (_) => setState(() => isHover = false),
       child: GestureDetector(
         onTap: () {
-          return context.goNamed(
+          context.pushNamed(
             AppRouter.posts,
             pathParameters: {
               'endpoint': widget.endpoint!,

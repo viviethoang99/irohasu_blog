@@ -39,7 +39,7 @@ class EditorStyleCustomizer {
       textStyleConfiguration: TextStyleConfiguration(
         text: baseTextStyle(fontFamily).copyWith(
           fontSize: fontSize,
-          color: theme.colorScheme.onBackground,
+          color: Theme.of(context).textTheme.bodyMedium?.color,
           height: 1.5,
         ),
         bold: baseTextStyle(fontFamily, fontWeight: FontWeight.bold).copyWith(
@@ -59,7 +59,7 @@ class EditorStyleCustomizer {
           decoration: TextDecoration.underline,
         ),
         code: baseTextStyle(fontFamily).copyWith(
-          fontSize: fontSize - 2,
+          fontSize: fontSize,
           fontWeight: FontWeight.normal,
           color: Colors.red,
           backgroundColor: theme.colorScheme.inverseSurface.withOpacity(0.8),
@@ -138,7 +138,7 @@ class EditorStyleCustomizer {
         alignment: PlaceholderAlignment.baseline,
         baseline: TextBaseline.alphabetic,
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 5),
           decoration: BoxDecoration(
             color: Theme.of(context).dividerColor,
             borderRadius: const BorderRadius.all(Radius.circular(5)),

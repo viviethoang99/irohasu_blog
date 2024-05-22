@@ -62,7 +62,9 @@ class ErrorScreen extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: () => context.go('/'),
-          child: const IrohaText.regular('Go to home page'),
+          child: const IrohaText.regular(
+            'Go to home page',
+          ),
         ),
       ),
     );

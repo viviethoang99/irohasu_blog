@@ -91,6 +91,10 @@ class _AppBarHorizontal extends StatelessWidget {
                 ontap: () {},
               ),
               _ButtonWidget(
+                title: 'Thể loại',
+                ontap: () {},
+              ),
+              _ButtonWidget(
                 title: 'Về tôi',
                 ontap: () {},
               ),
@@ -120,7 +124,7 @@ class __LogoBlogWidgetState extends State<_LogoBlogWidget> {
       onHover: (_) => setState(() => isHover = true),
       onExit: (_) => setState(() => isHover = false),
       child: InkWell(
-        onTap: () => context.goNamed(AppRouter.home),
+        onTap: () => context.pushNamed(AppRouter.home),
         child: Container(
           padding: const EdgeInsets.symmetric(
             horizontal: 12,
@@ -168,31 +172,33 @@ class _AppBarVertical extends StatelessWidget {
       left: MediaQuery.sizeOf(context).width >= 1000 ? 20 : -200,
       top: 0,
       bottom: 0,
-      child: SizedBox(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: () => context.goNamed(AppRouter.home),
-              child: const CircleAvatar(
-                radius: 20.0,
-                backgroundImage: AssetImage('assets/images/avatar.jpg'),
-                backgroundColor: Colors.blue,
-              ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          GestureDetector(
+            onTap: () => context.pushNamed(AppRouter.home),
+            child: const CircleAvatar(
+              radius: 20.0,
+              backgroundImage: AssetImage('assets/images/avatar.jpg'),
+              backgroundColor: Colors.blue,
             ),
-            const VSpace(20),
-            _ButtonWidget(
-              title: 'Bài viết'.splitContent(),
-              ontap: () {},
-            ),
-            _ButtonWidget(
-              title: 'Về tôi'.splitContent(),
-              ontap: () {},
-            ),
-            const _ItemThemeMode(),
-          ],
-        ),
+          ),
+          const VSpace(20),
+          _ButtonWidget(
+            title: 'Bài viết'.splitContent(),
+            ontap: () {},
+          ),
+          _ButtonWidget(
+            title: 'Thể loại'.splitContent(),
+            ontap: () {},
+          ),
+          _ButtonWidget(
+            title: 'Về tôi'.splitContent(),
+            ontap: () {},
+          ),
+          const _ItemThemeMode(),
+        ],
       ),
     );
   }
@@ -260,9 +266,7 @@ class _ItemThemeMode extends StatelessWidget {
       builder: (context, currentThemeMode) {
         return _ButtonWidget(
           icon: _themeModeIcon(currentThemeMode),
-          ontap: () {
-            context.read<AppearanceCubit>().touchThemeSetting();
-          },
+          ontap: context.read<AppearanceCubit>().touchThemeSetting,
         );
       },
     );

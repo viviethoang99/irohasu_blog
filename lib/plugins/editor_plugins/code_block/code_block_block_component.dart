@@ -291,7 +291,7 @@ class _CodeBlockComponentWidgetState extends State<CodeBlockComponentWidget>
           color: widget.style?.backgroundColor ??
               Theme.of(context).colorScheme.secondaryContainer,
           border: Border.all(
-            color: Theme.of(context).cardColor,
+            color: Theme.of(context).colorScheme.secondaryContainer,
             width: 2,
           ),
         ),
@@ -332,6 +332,7 @@ class _CodeBlockComponentWidgetState extends State<CodeBlockComponentWidget>
 
     return child;
   }
+
 
   Widget _buildAppbar() {
     return DecoratedBox(

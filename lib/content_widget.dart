@@ -108,7 +108,7 @@ class _PostWidget extends StatelessWidget {
                             color: Colors.red,
                           ),
                           onTap: () {
-                            return context.goNamed(
+                            return context.pushNamed(
                               AppRouter.posts,
                               pathParameters: {
                                 'endpoint': endpoint!,

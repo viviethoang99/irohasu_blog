@@ -64,15 +64,17 @@ class _DeferredWidgetState extends State<DeferredWidget> {
     return _loadChild ?? widget.placeholder;
   }
 }
+
 class DeferredLoading extends StatelessWidget {
   const DeferredLoading({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).colorScheme.background,
-      alignment: Alignment.center,
-      child: const CircularProgressIndicator(),
+    return ColoredBox(
+      color: Theme.of(context).colorScheme.onSurface,
+      child: const Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 }

@@ -49,37 +49,42 @@ class _DetailPostPageState extends State<DetailPostPage> {
       child: IrohaScaffold(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const VSpace(20),
-                BlocBuilder<PostDetailCubit, PostDetailState>(
-                  builder: (context, state) {
-                    return state.when(
-                      initial: () => const Padding(
-                        padding: EdgeInsets.only(top: 50),
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      ),
-                      loaded: (data) {
-                        final post = Post.fromJson(
-                          jsonDecode(data.description ?? ''),
-                        );
-                        final editotState = EditorState(
-                          document: markdownToDocument(
-                            data.files!.first.content!,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height,
+            ),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const VSpace(20),
+                  BlocBuilder<PostDetailCubit, PostDetailState>(
+                    builder: (context, state) {
+                      return state.when(
+                        initial: () => const Padding(
+                          padding: EdgeInsets.only(top: 50),
+                          child: Center(
+                            child: CircularProgressIndicator(),
                           ),
-                        );
-                        return buildEditor(editotState, post, data.createdAt);
-                      },
-                      failed: (err) => const SizedBox.shrink(),
-                    );
-                  },
-                ),
-                const VSpace(20),
-              ],
+                        ),
+                        loaded: (data) {
+                          final post = Post.fromJson(
+                            jsonDecode(data.description ?? ''),
+                          );
+                          final editotState = EditorState(
+                            document: markdownToDocument(
+                              data.files!.first.content!,
+                            ),
+                          );
+                          return buildEditor(editotState, post, data.createdAt);
+                        },
+                        failed: (err) => const SizedBox.shrink(),
+                      );
+                    },
+                  ),
+                  const VSpace(20),
+                ],
+              ),
             ),
           ),
         ),
@@ -201,7 +206,7 @@ class _DetailPostPageState extends State<DetailPostPage> {
           ),
         ),
         styleBuilder: () => CodeBlockStyle(
-          backgroundColor: Theme.of(context).colorScheme.background,
+          backgroundColor: Theme.of(context).colorScheme.onSurface,
           foregroundColor:
               Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
         ),
