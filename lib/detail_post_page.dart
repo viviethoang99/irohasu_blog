@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,6 +14,7 @@ import 'editor_style.dart';
 import 'plugins/editor_plugins/code_block/code_block_actions.dart';
 import 'plugins/editor_plugins/code_block/code_block_block_component.dart';
 import 'plugins/editor_plugins/code_block/code_block_style.dart';
+import 'post_api_service/post_api_service.dart';
 import 'shared/text.dart';
 
 class DetailPostPage extends StatefulWidget {
@@ -45,7 +44,10 @@ class _DetailPostPageState extends State<DetailPostPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<PostDetailCubit>(
-      create: (context) => PostDetailCubit(widget.id)..initLoading(),
+      create: (context) => PostDetailCubit(
+        widget.id,
+        RepositoryProvider.of<ApiService>(context),
+      )..initLoading(),
       child: IrohaScaffold(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -68,15 +70,12 @@ class _DetailPostPageState extends State<DetailPostPage> {
                           ),
                         ),
                         loaded: (data) {
-                          final post = Post.fromJson(
-                            jsonDecode(data.description ?? ''),
-                          );
                           final editotState = EditorState(
                             document: markdownToDocument(
-                              data.files!.first.content!,
+                              data.content ?? '',
                             ),
                           );
-                          return buildEditor(editotState, post, data.createdAt);
+                          return buildEditor(editotState, data, data.createdAt);
                         },
                         failed: (err) => const SizedBox.shrink(),
                       );
@@ -91,6 +90,8 @@ class _DetailPostPageState extends State<DetailPostPage> {
       ),
     );
   }
+
+
 
   Widget buildEditor(EditorState editorState, Post? post, DateTime? createAt) {
     return Container(
@@ -133,7 +134,28 @@ class _DetailPostPageState extends State<DetailPostPage> {
     );
   }
 
-  /// custom the block style
+
+  /// Returns a map of custom builders for different block components in the editor.
+  ///
+  /// The [editorState] parameter represents the current state of the editor.
+  ///
+  /// The returned map contains custom builders for various block components, such as headings, todo lists, bulleted lists, quotes, and code blocks.
+  /// Each builder is associated with a specific block type and is responsible for customizing the appearance and behavior of that block component.
+  ///
+  /// The [configuration] parameter is an instance of [BlockComponentConfiguration] that provides configuration options for the block components.
+  /// It specifies the padding and indent padding for each block component.
+  ///
+  /// The [textStyleBuilder] parameter is a function that takes a heading level as input and returns a text style for that heading level.
+  ///
+  /// The [iconBuilder] parameter is a function that takes a context, a node, and an index as input and returns an icon widget for the block component.
+  ///
+  /// The [CodeBlockKeys.type] block component is customized using the [CodeBlockComponentBuilder] class.
+  /// It provides a custom configuration, style, padding, and actions for code blocks.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final customBuilders = customBuilder(editorState);
+  /// ```
   Map<String, BlockComponentBuilder> customBuilder(
     EditorState editorState,
   ) {

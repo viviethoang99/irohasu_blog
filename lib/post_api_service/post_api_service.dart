@@ -1,18 +1,34 @@
 import 'package:dio/dio.dart';
+import 'package:irohasu_blog/post.dart';
+import 'package:irohasu_blog/post_api_service/api_result.dart';
 import 'package:retrofit/retrofit.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
-import '../post_detail.dart';
-import 'gist.dart';
+import 'list_posts.dart';
 
 part 'post_api_service.g.dart';
 
-@RestApi(baseUrl: 'https://api.github.com')
-abstract class GistClient {
-  factory GistClient(Dio dio, {String baseUrl}) = _GistClient;
+@RestApi(baseUrl: 'http://localhost:8080')
+abstract class ApiService {
+  factory ApiService(Dio dio) {
+    return _ApiService(dio);
+  }
 
-  @GET('/users/viviethoang99/gists')
-  Future<List<Gist>> getGist();
+  factory ApiService.create() => ApiService(Dio()
+    ..interceptors.addAll([
+      PrettyDioLogger(
+          requestHeader: true,
+          requestBody: true,
+          responseBody: true,
+          responseHeader: false,
+          error: true,
+          compact: true,
+          maxWidth: 90)
+    ]));
 
-  @GET('/gists/{id}')
-  Future<PostDetail> getContent(@Path('id') String id);
+  @GET('/api/posts')
+  Future<ListPosts> getGist();
+
+  @GET('/api/posts/{id}')
+  Future<ApiResult<Post>> getContent(@Path('id') String id);
 }

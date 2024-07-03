@@ -17,6 +17,7 @@ import 'cubit/appearance/base_appearance.dart';
 import 'cubit/appearance/desktop_appearance.dart';
 import 'cubit/appearance/mobile_appearance.dart';
 import 'cubit/document_appearance/document_appearance_cubit.dart';
+import 'post_api_service/post_api_service.dart';
 import 'router.dart';
 
 final getIt = GetIt.instance;
@@ -62,6 +63,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => DocumentAppearanceCubit(),
+        ),
+        RepositoryProvider<ApiService>(
+          create: (context) => ApiService.create(),
         ),
       ],
       child: BlocBuilder<AppearanceCubit, AppearanceState>(

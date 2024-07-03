@@ -8,6 +8,7 @@ import 'package:irohasu_blog/shared/spacing.dart';
 import 'package:irohasu_blog/shared/text.dart';
 
 import 'home/presentation/profile_widget.dart';
+import 'post_api_service/post_api_service.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -16,7 +17,9 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return IrohaScaffold(
       child: BlocProvider<PostsCubit>(
-        create: (context) => PostsCubit()..initLoad(),
+        create: (context) => PostsCubit(
+          RepositoryProvider.of<ApiService>(context),
+        )..initLoad(),
         child: const ResponsiveWidget(
           largeScreen: _LargeWidget(),
           mediumScreen: _MediumScreen(),

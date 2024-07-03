@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -73,9 +71,7 @@ class _PostContentWidget extends StatelessWidget {
             shrinkWrap: true,
             physics: physics,
             itemBuilder: (context, index) {
-              final post = Post.fromJson(
-                jsonDecode(posts[0].description ?? ''),
-              );
+              final post = posts[0];
               return _PostWidget(
                 post: post,
                 endpoint: posts[0].id,
@@ -117,7 +113,7 @@ class _PostWidgetState extends State<_PostWidget> {
           context.pushNamed(
             AppRouter.posts,
             pathParameters: {
-              'endpoint': widget.endpoint!,
+              'endpoint': widget.post?.id ?? '',
             },
           );
         },
@@ -142,9 +138,9 @@ class _PostWidgetState extends State<_PostWidget> {
                   ),
                   const VSpace(10),
                 ],
-                if (widget.post?.content?.isNotEmpty ?? false) ...[
+                if (widget.post?.description?.isNotEmpty ?? false) ...[
                   IrohaText.regular(
-                    widget.post?.content ?? '',
+                    widget.post?.description ?? '',
                     maxLines: 5,
                     fontSize: 15,
                     overflow: TextOverflow.visible,
