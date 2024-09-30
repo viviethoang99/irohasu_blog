@@ -11,6 +11,7 @@ import 'package:irohasu_blog/cubit/appearance/theme.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:syntax_highlight/syntax_highlight.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 import 'config/colorsscheme/default_colorscheme.dart';
 import 'cubit/appearance/base_appearance.dart';
@@ -40,7 +41,7 @@ void main() async {
   runApp(const MyApp());
 
   getIt.registerFactory<BaseAppearance>(
-    () => PlatformExtension.isMobile ? MobileAppearance() : DesktopAppearance(),
+    () => UniversalPlatform.isMobile ? MobileAppearance() : DesktopAppearance(),
   );
   getIt.registerFactory<KeyValueStorage>(() => DartKeyValue());
 }

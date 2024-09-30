@@ -8,7 +8,7 @@ import 'list_posts.dart';
 
 part 'post_api_service.g.dart';
 
-@RestApi(baseUrl: 'http://localhost:8080')
+@RestApi(baseUrl: 'http://api.irohasu.moe')
 abstract class ApiService {
   factory ApiService(Dio dio) {
     return _ApiService(dio);

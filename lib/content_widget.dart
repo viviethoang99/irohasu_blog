@@ -2,13 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:image_network/image_network.dart';
 import 'package:irohasu_blog/shared/spacing.dart';
 
 import 'cubit/posts/posts_cubit.dart';
 import 'post.dart';
-import 'router.dart';
 import 'shared/decoration.dart';
 import 'shared/text.dart';
 
@@ -85,38 +82,38 @@ class _PostWidget extends StatelessWidget {
             child: LayoutBuilder(builder: (context, max) {
               return Container(
                 color: Colors.blue,
-                child: AspectRatio(
-                  aspectRatio: 3,
-                  child: post?.urlImage?.isEmpty ?? true
-                      ? const SizedBox.shrink()
-                      : ImageNetwork(
-                          image: post?.urlImage ?? '',
-                          height: max.maxWidth / 3,
-                          width: max.maxWidth,
-                          duration: 1500,
-                          curve: Curves.easeIn,
-                          onPointer: true,
-                          debugPrint: false,
-                          fullScreen: false,
-                          fitAndroidIos: BoxFit.fitWidth,
-                          fitWeb: BoxFitWeb.cover,
-                          onLoading: const CircularProgressIndicator(
-                            color: Colors.indigoAccent,
-                          ),
-                          onError: const Icon(
-                            Icons.error,
-                            color: Colors.red,
-                          ),
-                          onTap: () {
-                            return context.pushNamed(
-                              AppRouter.posts,
-                              pathParameters: {
-                                'endpoint': endpoint!,
-                              },
-                            );
-                          },
-                        ),
-                ),
+                // child: AspectRatio(
+                //   aspectRatio: 3,
+                //   child: post?.urlImage?.isEmpty ?? true
+                //       ? const SizedBox.shrink()
+                //       : ImageNetwork(
+                //           image: post?.urlImage ?? '',
+                //           height: max.maxWidth / 3,
+                //           width: max.maxWidth,
+                //           duration: 1500,
+                //           curve: Curves.easeIn,
+                //           onPointer: true,
+                //           debugPrint: false,
+                //           fullScreen: false,
+                //           fitAndroidIos: BoxFit.fitWidth,
+                //           fitWeb: BoxFitWeb.cover,
+                //           onLoading: const CircularProgressIndicator(
+                //             color: Colors.indigoAccent,
+                //           ),
+                //           onError: const Icon(
+                //             Icons.error,
+                //             color: Colors.red,
+                //           ),
+                //           onTap: () {
+                //             return context.pushNamed(
+                //               AppRouter.posts,
+                //               pathParameters: {
+                //                 'endpoint': endpoint!,
+                //               },
+                //             );
+                //           },
+                //         ),
+                // ),
               );
             }),
           ),

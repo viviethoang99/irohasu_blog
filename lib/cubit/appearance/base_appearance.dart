@@ -1,4 +1,3 @@
-import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -25,8 +24,7 @@ abstract class BaseAppearance {
     double? lineHeight,
   }) {
     fontSize = fontSize ?? FontSizes.s12;
-    fontWeight = fontWeight ??
-        (PlatformExtension.isDesktopOrWeb ? FontWeight.w500 : FontWeight.w400);
+    fontWeight = fontWeight ?? FontWeight.w400;
     letterSpacing = fontSize * (letterSpacing ?? 0.005);
 
     final textStyle = TextStyle(
