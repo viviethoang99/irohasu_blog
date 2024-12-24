@@ -2,15 +2,15 @@ import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:irh_editor/plugins/editor_plugins/code_block/code_block_actions.dart';
+import 'package:irh_editor/plugins/editor_plugins/code_block/code_block_block_component.dart';
+import 'package:irh_editor/plugins/editor_plugins/code_block/code_block_style.dart';
 import 'package:irohasu_blog/config/extension/extension.dart';
 import 'package:irohasu_blog/editor_style.dart';
-import 'package:irohasu_blog/plugins/editor_plugins/code_block/code_block_actions.dart';
 import 'package:irohasu_blog/post.dart';
 import 'package:irohasu_blog/shared/reponsiveness.dart';
 import 'package:irohasu_blog/shared/text.dart';
 
-import 'plugins/editor_plugins/code_block/code_block_block_component.dart';
-import 'plugins/editor_plugins/code_block/code_block_style.dart';
 import 'shared/spacing.dart';
 import 'table_of_contents.dart';
 
@@ -54,70 +54,76 @@ class _PostDetailLoadedState extends State<PostDetailLoaded> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            color: Theme.of(context).cardColor,
-          ),
-          constraints: const BoxConstraints(maxWidth: 750),
-          margin: const EdgeInsets.symmetric(horizontal: 4),
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: IntrinsicHeight(
-            child: AppFlowyEditor(
-              header: Align(
-                alignment: Alignment.topLeft,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const VSpace(20),
-                    if (post.title?.isNotEmpty ?? false) ...[
-                      IrohaText.semibold(
-                        post.title ?? '',
-                        fontSize: 30,
-                        textAlign: TextAlign.start,
-                        maxLines: null,
-                      ),
-                      const VSpace(10),
-                    ],
-                    if (post.createdAt != null) ...[
-                      IrohaText.regular(
-                        subContent,
-                        fontSize: 14,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                      const VSpace(12),
-                    ]
-                  ],
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxWidth: 900,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+              ),
+              constraints: const BoxConstraints(maxWidth: 750),
+              margin: const EdgeInsets.symmetric(horizontal: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: IntrinsicHeight(
+                child: AppFlowyEditor(
+                  header: Align(
+                    alignment: Alignment.topLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const VSpace(20),
+                        if (post.title?.isNotEmpty ?? false) ...[
+                          IrohaText.semibold(
+                            post.title ?? '',
+                            fontSize: 30,
+                            textAlign: TextAlign.start,
+                            maxLines: null,
+                          ),
+                          const VSpace(10),
+                        ],
+                        if (post.createdAt != null) ...[
+                          IrohaText.regular(
+                            subContent,
+                            fontSize: 14,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                          const VSpace(12),
+                        ]
+                      ],
+                    ),
+                  ),
+                  footer: Container(
+                    alignment: Alignment.bottomRight,
+                    padding: const EdgeInsets.only(top: 20),
+                  ),
+                  editorState: widget.editorState,
+                  editable: false,
+                  shrinkWrap: true,
+                  editorStyle: _styleCustomizer.style(),
+                  blockComponentBuilders: customBuilder(),
                 ),
               ),
-              footer: Container(
-                alignment: Alignment.bottomRight,
-                padding: const EdgeInsets.only(top: 20),
+            ),
+          ),
+          const HSpace(8),
+          ResponsiveWidget(
+            largeScreen: Align(
+              alignment: Alignment.topRight,
+              child: TableOfContents(
+                controller: _controller,
+                editorState: widget.editorState,
               ),
-              editorState: widget.editorState,
-              editable: false,
-              shrinkWrap: true,
-              editorStyle: _styleCustomizer.style(),
-              blockComponentBuilders: customBuilder(),
             ),
+            mediumScreen: const SizedBox.shrink(),
+            smallScreen: const SizedBox.shrink(),
           ),
-        ),
-        const HSpace(8),
-        ResponsiveWidget(
-          largeScreen: Align(
-            alignment: Alignment.topRight,
-            child: TableOfContents(
-              controller: _controller,
-              editorState: widget.editorState,
-            ),
-          ),
-          mediumScreen: const SizedBox.shrink(),
-          smallScreen: const SizedBox.shrink(),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
