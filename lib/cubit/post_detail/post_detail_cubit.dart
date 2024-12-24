@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:irohasu_blog/post.dart';
@@ -17,6 +18,20 @@ class PostDetailCubit extends Cubit<PostDetailState> {
 
   FutureOr initLoading() async {
     final result = await _apiService.getContent(id);
-    emit(PostDetailState.loaded(result.data));
+    final post = result.data;
+
+    final editorState = EditorState(
+      document: markdownToDocument(post.content ?? ''),
+    );
+
+    final countWord = WordCountService(editorState: editorState)..register();
+
+    emit(
+      PostDetailState.loaded(
+        post: post,
+        editorState: editorState,
+        countWord: countWord.getDocumentCounters().charCount,
+      ),
+    );
   }
 }
