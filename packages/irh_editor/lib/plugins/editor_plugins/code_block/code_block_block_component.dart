@@ -127,9 +127,6 @@ class CodeBlockComponentBuilder extends BlockComponentBuilder {
       showLineNumbers: showLineNumbers,
     );
   }
-
-  @override
-  bool validate(Node node) => node.delta != null;
 }
 
 /// A widget representing a code block component.

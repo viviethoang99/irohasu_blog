@@ -43,8 +43,7 @@ class _MediumScreen extends StatelessWidget {
           ),
           child: const Column(
             children: [
-              VSpace(40),
-              ProfileWidget(),
+              VSpace(40), 
               VSpace(30),
               ListPostWidget(),
               Padding(

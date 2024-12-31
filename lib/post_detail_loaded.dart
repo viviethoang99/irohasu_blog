@@ -60,6 +60,7 @@ class _PostDetailLoadedState extends State<PostDetailLoaded> {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: Container(
@@ -67,7 +68,7 @@ class _PostDetailLoadedState extends State<PostDetailLoaded> {
                 color: Theme.of(context).cardColor,
               ),
               constraints: const BoxConstraints(maxWidth: 750),
-              margin: const EdgeInsets.symmetric(horizontal: 4),
+              margin: const EdgeInsets.symmetric(horizontal: 12),
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: IntrinsicHeight(
                 child: AppFlowyEditor(
@@ -104,24 +105,25 @@ class _PostDetailLoadedState extends State<PostDetailLoaded> {
                   editorState: widget.editorState,
                   editable: false,
                   shrinkWrap: true,
+                  showMagnifier: false,
                   editorStyle: _styleCustomizer.style(),
+                  disableScrollService: true,
+                  editorScrollController: _controller,
                   blockComponentBuilders: customBuilder(),
                 ),
               ),
             ),
           ),
           const HSpace(8),
-          ResponsiveWidget(
-            largeScreen: Align(
-              alignment: Alignment.topRight,
-              child: TableOfContents(
-                controller: _controller,
-                editorState: widget.editorState,
-              ),
-            ),
-            mediumScreen: const SizedBox.shrink(),
-            smallScreen: const SizedBox.shrink(),
-          ),
+          ResponsiveWidget.isLargeScreen(context)
+              ? Align(
+                  alignment: Alignment.topRight,
+                  child: TableOfContents(
+                    controller: _controller,
+                    editorState: widget.editorState,
+                  ),
+                )
+              : const SizedBox.shrink(),
         ],
       ),
     );

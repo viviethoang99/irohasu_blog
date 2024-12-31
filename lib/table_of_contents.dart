@@ -1,5 +1,6 @@
 import 'package:appflowy_editor/appflowy_editor.dart';
 import 'package:flutter/material.dart';
+import 'package:irohasu_blog/shared/text.dart';
 
 import 'shared/spacing.dart';
 
@@ -27,16 +28,17 @@ class TableOfContents extends StatelessWidget {
       case _OutlineBlockStatus.noHeadings:
         child = const Align(
           alignment: Alignment.centerLeft,
-          child: Text(
+          child: IrohaText.semibold(
             'Không có tiêu đề',
-            // style: configuration.placeholderTextStyle(node),
+            fontSize: 16,
           ),
         );
       case _OutlineBlockStatus.noMatchHeadings:
         child = const Align(
           alignment: Alignment.centerLeft,
-          child: Text(
+          child: IrohaText.semibold(
             'Không có tiêu đề phù hợp',
+            fontSize: 16,
             // style: configuration.placeholderTextStyle(node),
           ),
         );
@@ -56,9 +58,7 @@ class TableOfContents extends StatelessWidget {
             .toList();
         child = Padding(
           padding: const EdgeInsets.only(left: 15.0),
-          child: Column(
-            children: children,
-          ),
+          child: Column(children: children),
         );
     }
 
@@ -78,11 +78,13 @@ class TableOfContents extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              'Thư mục bài viết',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const VSpace(8.0),
+            if (status != _OutlineBlockStatus.success) ...[
+              IrohaText.semibold(
+                'Thư mục bài viết',
+                fontSize: 18,
+              ),
+              const VSpace(8.0),
+            ],
             child,
           ],
         ),
@@ -143,15 +145,25 @@ class OutlineItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      child: Row(
-        children: [
-          HSpace(node.leftIndent),
-          Text(
-            node.outlineItemText,
+    return Row(
+      children: [
+        HSpace(node.leftIndent),
+        Expanded(
+          child: InkWell(
+            onTap: () {
+              // controller.scrollToNode(node);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: IrohaText(
+                node.outlineItemText,
+                fontSize: 15,
+                maxLines: null,
+              ),
+            ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -170,7 +182,7 @@ extension on Node {
 
     final level = attributes[HeadingBlockKeys.level];
     if (level != null) {
-      final indent = (level - 1) * 15.0;
+      final indent = (level - 1) * 4.0;
       return indent;
     }
 

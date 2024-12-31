@@ -21,3 +21,4 @@ class PostsCubit extends Cubit<PostsState> {
     emit(PostsState.loaded(listData.data ?? <Post>[]));
   }
 }
+ 

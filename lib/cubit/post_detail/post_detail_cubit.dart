@@ -21,7 +21,7 @@ class PostDetailCubit extends Cubit<PostDetailState> {
     final post = result.data;
 
     final editorState = EditorState(
-      document: markdownToDocument(post.content ?? ''),
+      document: markdownToDocument(post.content ?? 'Hello world'),
     );
 
     final countWord = WordCountService(editorState: editorState)..register();
@@ -30,7 +30,7 @@ class PostDetailCubit extends Cubit<PostDetailState> {
       PostDetailState.loaded(
         post: post,
         editorState: editorState,
-        countWord: countWord.getDocumentCounters().charCount,
+        countWord: countWord.getDocumentCounters().wordCount,
       ),
     );
   }

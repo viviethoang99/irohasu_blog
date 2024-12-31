@@ -14,9 +14,11 @@ class IrohaScaffold extends StatelessWidget {
   const IrohaScaffold({
     super.key,
     required this.child,
+    this.floatingActionButton,
   });
 
   final Widget child;
+  final Widget? floatingActionButton;
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +58,7 @@ class IrohaScaffold extends StatelessWidget {
           ],
         ),
       ),
+      floatingActionButton: floatingActionButton,
     );
   }
 }
@@ -77,12 +80,9 @@ class _AppBarHorizontal extends StatelessWidget {
         Theme.of(context).colorScheme.shadow.withOpacity(0.15),
       ),
       padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
+      child: Column(
         children: [
-          const HSpace(20),
           const _LogoBlogWidget(),
-          const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -101,7 +101,6 @@ class _AppBarHorizontal extends StatelessWidget {
               const _ItemThemeMode(),
             ],
           ),
-          const HSpace(8),
         ],
       ),
     );
@@ -232,7 +231,7 @@ class _ButtonWidgetState extends State<_ButtonWidget> {
         child: Container(
           padding: const EdgeInsets.symmetric(
             horizontal: 8,
-            vertical: 12,
+            vertical: 8,
           ),
           decoration: isHover
               ? IrohaDecoration.decoration(

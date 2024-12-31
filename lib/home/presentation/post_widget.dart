@@ -112,9 +112,7 @@ class _PostWidgetState extends State<_PostWidget> {
         onTap: () {
           context.pushNamed(
             AppRouter.posts,
-            pathParameters: {
-              'endpoint': widget.post?.id ?? '',
-            },
+            pathParameters: {'endpoint': widget.post?.id ?? ''},
           );
         },
         child: Container(

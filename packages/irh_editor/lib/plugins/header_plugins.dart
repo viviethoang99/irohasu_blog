@@ -28,12 +28,6 @@ class CustomHeadingBlockComponentBuilder extends BlockComponentBuilder {
       ),
     );
   }
-
-  @override
-  bool validate(Node node) =>
-      node.delta != null &&
-      node.children.isEmpty &&
-      node.attributes[HeadingBlockKeys.level] is int;
 }
 
 class HeadingBlockComponentWidget extends BlockComponentStatefulWidget {
@@ -50,12 +44,10 @@ class HeadingBlockComponentWidget extends BlockComponentStatefulWidget {
   final TextStyle Function(int level)? textStyleBuilder;
 
   @override
-  State<HeadingBlockComponentWidget> createState() =>
-      _HeadingBlockComponentWidgetState();
+  State<HeadingBlockComponentWidget> createState() => _HeadingBlockComponentWidgetState();
 }
 
-class _HeadingBlockComponentWidgetState
-    extends State<HeadingBlockComponentWidget>
+class _HeadingBlockComponentWidgetState extends State<HeadingBlockComponentWidget>
     with
         SelectableMixin,
         DefaultSelectableMixin,
@@ -113,16 +105,14 @@ class _HeadingBlockComponentWidgetState
                 textSpanDecorator: (textSpan) {
                   var result = textSpan.updateTextStyle(textStyle);
                   result = result.updateTextStyle(
-                    widget.textStyleBuilder?.call(level) ??
-                        defaultTextStyle(level),
+                    widget.textStyleBuilder?.call(level) ?? defaultTextStyle(level),
                   );
                   return result;
                 },
                 placeholderText: placeholderText,
                 placeholderTextSpanDecorator: (textSpan) => textSpan
                     .updateTextStyle(
-                      widget.textStyleBuilder?.call(level) ??
-                          defaultTextStyle(level),
+                      widget.textStyleBuilder?.call(level) ?? defaultTextStyle(level),
                     )
                     .updateTextStyle(
                       placeholderTextStyle,
